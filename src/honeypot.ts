@@ -86,7 +86,6 @@ async function runServer() {
             session.on('shell', (accept, reject) => {
               const stream = accept()
               stream.write('Eat my shiny ass!\r\n')
-              client.end()
             })
           })
         })
