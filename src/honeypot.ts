@@ -23,7 +23,6 @@ async function getOrGenerateKeyPair() {
     const key = await keygen({
       type: 'rsa',
       location: KEY_NAME,
-      comment: 'xavier@stouder.io',
       size: '2048',
       format: 'PEM',
     })
@@ -53,7 +52,7 @@ async function runServer() {
         .on('authentication', (ctx) => {
           const username = ctx.username
           if (ctx.method !== 'password') {
-            ctx.reject()
+            ctx.reject(['password'])
             return
           }
 
@@ -65,6 +64,7 @@ async function runServer() {
 
           doc.sheetsByTitle[process.env.SHEET_NAME ?? 'data']
             .addRow({
+              datetime: new Date().toISOString(),
               username: `${username}`,
               password: `${password}`,
               remoteAddr: `${remoteAddr}`,
@@ -75,7 +75,7 @@ async function runServer() {
             })
             .then((sheet) => sheet.save())
 
-          ctx.accept()
+          ctx.reject(['password'])
         })
         .on('ready', () => {
           client.on('session', (accept, reject) => {
