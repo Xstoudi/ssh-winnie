@@ -37,7 +37,7 @@ async function googleAuth() {
     private_key: Buffer.from(
       process.env.SHEET_PRIVATE_KEY ?? '',
       'base64'
-    ).toString('utf8'),
+    ).toString('ascii'),
   })
 
   await doc.loadInfo()
