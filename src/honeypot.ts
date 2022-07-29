@@ -34,7 +34,10 @@ async function getOrGenerateKeyPair() {
 async function googleAuth() {
   await doc.useServiceAccountAuth({
     client_email: process.env.SHEET_CLIENT_EMAIL ?? '',
-    private_key: process.env.SHEET_PRIVATE_KEY ?? '',
+    private_key: Buffer.from(
+      process.env.SHEET_PRIVATE_KEY ?? '',
+      'base64'
+    ).toString('utf8'),
   })
 
   await doc.loadInfo()
