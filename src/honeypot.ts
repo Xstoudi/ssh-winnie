@@ -42,7 +42,17 @@ async function googleAuth() {
   await doc.loadInfo()
 }
 
+async function save(authBulk: any[]) {
+  if (authBulk.length === 0) return
+  const sheet = doc.sheetsByTitle[process.env.SHEET_NAME ?? 'data']
+  await sheet.addRows(authBulk)
+  await sheet.saveUpdatedCells()
+}
+
 async function runServer() {
+  const authBulk: any[] = []
+  setInterval(() => save(authBulk.splice(0, authBulk.length)), 5000)
+
   new Server(
     {
       hostKeys: [await getOrGenerateKeyPair()],
@@ -62,18 +72,16 @@ async function runServer() {
 
           const asn = findASN(toInt(remoteAddr))
 
-          doc.sheetsByTitle[process.env.SHEET_NAME ?? 'data']
-            .addRow({
-              datetime: new Date().toISOString(),
-              username: `${username}`,
-              password: `${password}`,
-              remoteAddr: `${remoteAddr}`,
-              remoteIdent: `${remoteIdent}`,
-              asnCountry: `${asn?.country ?? 'WTF'}`,
-              asnName: `${asn?.name ?? 'WTF'}`,
-              asnId: `AS${asn?.asn ?? 'WTF'}`,
-            })
-            .then((sheet) => sheet.save())
+          authBulk.push({
+            datetime: new Date().toISOString(),
+            username: `${username}`,
+            password: `${password}`,
+            remoteAddr: `${remoteAddr}`,
+            remoteIdent: `${remoteIdent}`,
+            asnCountry: `${asn?.country ?? 'WTF'}`,
+            asnName: `${asn?.name ?? 'WTF'}`,
+            asnId: `AS${asn?.asn ?? 'WTF'}`,
+          })
 
           ctx.reject(['password'])
         })
