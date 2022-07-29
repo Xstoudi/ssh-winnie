@@ -9,7 +9,6 @@ import findASN from './IpToAsn'
 
 const KEY_NAME = 'host'
 const SHEET_ID = process.env.SHEET_ID
-const SHEET_KEY = JSON.parse(readFileSync('sheets-key.json', 'utf8'))
 
 interface AuthData {
   username: string
