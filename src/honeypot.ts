@@ -63,7 +63,7 @@ async function runServer() {
 
           const asn = findASN(toInt(remoteAddr))
 
-          doc.sheetsByTitle['data']
+          doc.sheetsByTitle[process.env.SHEET_NAME ?? 'data']
             .addRow({
               username: `${username}`,
               password: `${password}`,
@@ -89,6 +89,9 @@ async function runServer() {
               client.end()
             })
           })
+        })
+        .on('error', (err) => {
+          console.log('error occured', err.message)
         })
     }
   ).listen(Number(process.env.PORT), '0.0.0.0', () => {
