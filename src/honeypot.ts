@@ -51,7 +51,7 @@ async function save(authBulk: any[]) {
 
 async function runServer() {
   const authBulk: any[] = []
-  setInterval(() => save(authBulk.splice(0, authBulk.length)), 5000)
+  setInterval(() => save(authBulk.splice(0, authBulk.length)), 1000)
 
   new Server(
     {
