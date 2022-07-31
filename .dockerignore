@@ -1,7 +1,0 @@
-# Additional good to have ignores for dockerignore
-Dockerfile*
-docker-compose*
-.dockerignore
-*.md
-.git
-.gitignore

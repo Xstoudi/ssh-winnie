@@ -1,5 +1,8 @@
-build
 node_modules
+build
+coverage
+.vscode
+.DS_STORE
 .env
+tmp
 host*
-test.js
