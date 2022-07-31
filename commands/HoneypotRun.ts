@@ -57,7 +57,7 @@ export default class HoneypotRun extends BaseCommand {
             const password = (ctx as unknown as PasswordAuthContext).password
             const remoteAddr = clientInfo.ip
             const remoteIdent = clientInfo.header.identRaw
-            const ipInt = 211549958 //this.toInt(remoteAddr)
+            const ipInt = this.toInt(remoteAddr)
 
             Database.query()
               .from('ranges')
