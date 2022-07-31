@@ -8,6 +8,6 @@ services:
       context: .
       target: production
     ports:
-      - 22:22
+      - 22:3555
     env_file:
       - .env
