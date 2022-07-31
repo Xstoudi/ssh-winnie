@@ -44,6 +44,7 @@ export default class HoneypotRun extends BaseCommand {
     new Server(
       {
         hostKeys: [await this.getOrGenerateKeyPair()],
+        ident: Env.get('SSH_IDENTITY'),
       },
       (client, clientInfo) => {
         client
