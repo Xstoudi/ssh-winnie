@@ -23,7 +23,7 @@ export default class HoneypotRun extends BaseCommand {
   }
 
   public async run() {
-    this.setup()
+    await this.setup()
     this.runServer()
   }
 
@@ -67,6 +67,7 @@ export default class HoneypotRun extends BaseCommand {
               .first()
               .then((asn) => {
                 if (asn === null) {
+                  console.log(`${remoteAddr} is not in any range`)
                   return client.end()
                 }
 

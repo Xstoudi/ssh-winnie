@@ -20,7 +20,7 @@ FROM base AS production
 ENV HOST=0.0.0.0
 ENV PORT=$PORT
 ENV APP_KEY=$APP_KEY
-ENV NODE_ENV=production
+ENV NODE_ENV=development
 ENV DB_CONNECTION=pg
 ENV PG_HOST=$PG_HOST
 ENV PG_PORT=$PG_PORT
@@ -29,7 +29,7 @@ ENV PG_PASSWORD=$PG_PASSWORD
 ENV PG_DB_NAME=$PG_DB_NAME
 ENV WINNIE_NAME=$WINNIE_NAME
 COPY --chown=node:node ./package*.json ./
-RUN npm ci --production
+RUN npm ci
 COPY --chown=node:node --from=build /home/node/app/build .
 EXPOSE $PORT
 CMD [ "dumb-init", "node", "ace", "honeypot:run" ]
