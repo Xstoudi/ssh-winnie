@@ -1,12 +1,16 @@
 html,
 body {
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
+}
+
+*,
+::after,
+::before {
   box-sizing: border-box;
 }
 body {
   margin: 0px;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-content: center;
@@ -114,4 +118,30 @@ div.tooltip {
 div.tooltip h6 {
   margin: 0;
   color: #212121;
+}
+
+.barplots {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.barplots > div {
+  width: 50%;
+}
+
+.svg-container {
+  display: inline-block;
+  position: relative;
+  width: 50%;
+  padding-bottom: 50%;
+  vertical-align: top;
+  overflow: hidden;
+}
+
+.svg-content-responsive {
+  display: block;
+  position: absolute;
+  top: 10px;
+  left: 0;
 }

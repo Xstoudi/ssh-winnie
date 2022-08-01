@@ -11,32 +11,18 @@
   <div id="app">
     <div class="map-container">
       <table class="map-data">
-        <thead>
-          <tr>
-            <th>Country</th>
-            <th>Count</th>
-          </tr>
-        </thead>
-        <tbody>
-          @each(country in mapData)
-          <tr>
-            <td> {{ country.name }} </td>
-            <td> {{ country.population }} </td>
-          </tr>
-          @end
-        </tbody>
-        <tfoot>
-          <tr>
-            <td>Total</td>
-            <td> {{ mapData.reduce((previous, current) => previous + current.population, 0) }} </td>
-          </tr>
-        </tfoot>
+        
       </table>
-      <div class=map>
-        {{{ map }}}
+      <div class="map">
       </div>
     </div>
-    <div>
+
+    <div class="barplots">
+      <div class="usernames-container svg-container"></div>
+      <div class="passwords-container svg-container"></div>
+      <div class="asnames-container svg-container"></div>
+      <div class="identities-container svg-container"></div>
+    </div>
   </div>
 </body>
 </html>
