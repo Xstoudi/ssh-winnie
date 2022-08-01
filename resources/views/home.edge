@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Winnie dashboard</title>
+  @entryPointStyles('app')
+  @entryPointScripts('app')
+</head>
+<body class="font-body text-white">
+  <div id="app">
+    <div class="map-container">
+      <table class="map-data">
+        <thead>
+          <tr>
+            <th>Country</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          @each(country in mapData)
+          <tr>
+            <td> {{ country.name }} </td>
+            <td> {{ country.population }} </td>
+          </tr>
+          @end
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Total</td>
+            <td> {{ mapData.reduce((previous, current) => previous + current.population, 0) }} </td>
+          </tr>
+        </tfoot>
+      </table>
+      <div class=map>
+        {{{ map }}}
+      </div>
+    </div>
+    <div>
+  </div>
+</body>
+</html>
