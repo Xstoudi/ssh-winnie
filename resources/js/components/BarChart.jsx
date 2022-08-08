@@ -1,23 +1,9 @@
-import {
-  groupSort,
-  map,
-  select,
-  scaleLinear,
-  scaleBand,
-  axisTop,
-  axisLeft,
-  max,
-  range,
-  InternSet,
-} from 'd3'
+import { map, select, scaleLinear, scaleBand, axisTop, axisLeft, max, range, InternSet } from 'd3'
 import useD3 from '../hooks/useD3'
+import trimLabel from '../utils/trimLabel'
 
 const width = 800
 const height = 400
-
-function trimLabel(label) {
-  return label.length >= 20 ? `${label.slice(0, 17)}...` : label
-}
 
 export default function BarChart({
   data,
@@ -58,13 +44,15 @@ export default function BarChart({
       const xScale = xType(xDomain, xRange)
       const yScale = scaleBand(yDomain, yRange).padding(yPadding)
       const xAxis = axisTop(xScale).ticks(width / 80, xFormat)
-      const yAxis = axisLeft(yScale).tickSizeOuter(0)
+      const yAxis = axisLeft(yScale)
+        .tickSizeOuter(0)
+        .tickFormat((d) => trimLabel(d))
 
       if (title === undefined) {
         const formatValue = xScale.tickFormat(100, xFormat)
         title = (i) => `${formatValue(X[i])}`
       } else {
-        const O = d3.map(data, (d) => d)
+        const O = map(data, (d) => d)
         const T = title
         title = (i) => T(O[i], i, data)
       }
@@ -120,7 +108,6 @@ export default function BarChart({
             .attr('fill', titleAltColor)
             .attr('text-anchor', 'start')
         )
-
       select('.y-axis').attr('transform', `translate(${marginLeft},0)`).call(yAxis)
     },
     [data.length]

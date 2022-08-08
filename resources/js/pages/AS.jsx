@@ -9,8 +9,6 @@ export default function AS() {
   const as = useQuery(['as'], getAS)
   if (as.isError || as.isLoading) return <h1>Loading...</h1>
 
-  const data = as.data.map((d) => ({ ...d, asName: trimLabel(d.asName) }))
-
   return (
     <div className="flex">
       <div>
@@ -24,12 +22,12 @@ export default function AS() {
               format: (x) => x.toLocaleString(),
             },
           ]}
-          datas={data}
+          datas={as.data}
         />
       </div>
       <div className="flex-1 flex flex-col">
         <BarChart
-          data={data}
+          data={as.data}
           x={(d) => d.population}
           y={(d) => d.asName}
           marginLeft={175}
