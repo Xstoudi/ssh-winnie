@@ -10,7 +10,7 @@ export default class StatsController {
         .count('username as population')
         .groupBy('username')
         .orderBy('population', 'desc')
-        .limit(10)
+        .limit(20)
     ).map((entryRow) => ({
       population: Number(entryRow.population),
       username: entryRow.username,
@@ -24,7 +24,7 @@ export default class StatsController {
         .count('password as population')
         .groupBy('password')
         .orderBy('population', 'desc')
-        .limit(10)
+        .limit(20)
     ).map((entryRow) => ({
       population: Number(entryRow.population),
       password: entryRow.password,
@@ -52,7 +52,7 @@ export default class StatsController {
         .count('as_name as population')
         .groupBy('as_name')
         .orderBy('population', 'desc')
-        .limit(10)
+        .limit(20)
     ).map((entryRow) => ({
       population: Number(entryRow.population),
       asName: entryRow.as_name,
@@ -66,10 +66,30 @@ export default class StatsController {
         .count('remote_identity as population')
         .groupBy('remote_identity')
         .orderBy('population', 'desc')
-        .limit(10)
+        .limit(20)
     ).map((entryRow) => ({
       population: Number(entryRow.population),
       remoteIdentity: entryRow.remote_identity,
     }))
+  }
+
+  public async dashboard(ctx: HttpContextContract) {
+    const stats = await Promise.all([
+      Database.from('clean_reports').count('* as population').first(),
+      Database.from('clean_reports').countDistinct('as_country_code as population').first(),
+      Database.from('clean_reports').countDistinct('username as population').first(),
+      Database.from('clean_reports').countDistinct('password as population').first(),
+      Database.from('clean_reports').countDistinct('as_name as population').first(),
+      Database.from('clean_reports').countDistinct('remote_identity as population').first(),
+    ])
+
+    return {
+      attempts: await stats[0].population,
+      countries: await stats[1].population,
+      usernames: await stats[2].population,
+      passwords: await stats[3].population,
+      asNames: await stats[4].population,
+      remoteIdentities: await stats[5].population,
+    }
   }
 }

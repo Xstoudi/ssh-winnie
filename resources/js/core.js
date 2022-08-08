@@ -1,14 +1,19 @@
-import axios from 'axios'
+import { createRoot } from 'react-dom/client'
+import React, { createElement } from 'react'
+
+import App from './App'
+import '../css/core.css'
+
+/*import axios from 'axios'
 import { generateMap } from './map'
 
-import '../css/app.css'
 import { barplot } from './barplot'
 import { select } from 'd3-selection'
 
 document.addEventListener('DOMContentLoaded', function (event) {
   ;(async () => {
     await generateMap()
-
+    
     const { data: usernamesData } = await axios('/usernames')
     barplot(
       '.usernames-container',
@@ -34,3 +39,6 @@ document.addEventListener('DOMContentLoaded', function (event) {
     )
   })()
 })
+*/
+const root = createRoot(document.getElementById('app'))
+root.render(createElement(App))

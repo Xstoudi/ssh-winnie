@@ -1,6 +1,7 @@
 const { join } = require('path')
 const Encore = require('@symfony/webpack-encore')
-
+const path = require('path')
+const webpack = require('webpack')
 /*
 |--------------------------------------------------------------------------
 | Encore runtime environment
@@ -45,7 +46,7 @@ Encore.setPublicPath('/assets')
 | entrypoints.
 |
 */
-Encore.addEntry('app', './resources/js/app.js')
+Encore.addEntry('core', './resources/js/core.js')
 
 /*
 |--------------------------------------------------------------------------
@@ -57,10 +58,10 @@ Encore.addEntry('app', './resources/js/app.js')
 | we must copy them manually.
 |
 */
-// Encore.copyFiles({
-//   from: './resources/images',
-//   to: 'images/[path][name].[hash:8].[ext]',
-// })
+Encore.copyFiles({
+  from: './resources/images',
+  to: 'images/[path][name].[hash:8].[ext]',
+})
 
 /*
 |--------------------------------------------------------------------------
@@ -169,8 +170,8 @@ Encore.configureDevServerOptions((options) => {
 | PostCSS or CSS.
 |
 */
-// Encore.enablePostCssLoader()
-// Encore.configureCssLoader(() => {})
+Encore.enablePostCssLoader()
+//Encore.configureCssLoader()
 
 /*
 |--------------------------------------------------------------------------
@@ -186,6 +187,13 @@ Encore.configureDevServerOptions((options) => {
 //   runtimeCompilerBuild: false,
 //   useJsx: false
 // })
+
+Encore.enableReactPreset()
+Encore.addPlugin(
+  new webpack.ProvidePlugin({
+    React: 'react',
+  })
+)
 
 /*
 |--------------------------------------------------------------------------
@@ -210,5 +218,6 @@ config.stats = 'errors-warnings'
 |
 | Export config for webpack to do its job
 |
+
 */
 module.exports = config
