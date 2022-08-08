@@ -6,7 +6,6 @@ import { getDashboard } from '../services/stats'
 export default function Dashboard() {
   const stats = useQuery(['dashboard'], getDashboard)
 
-  console.log(stats)
   if (stats.isError || stats.isLoading) return <h1>Loading...</h1>
 
   const keys = Object.keys(stats.data)
