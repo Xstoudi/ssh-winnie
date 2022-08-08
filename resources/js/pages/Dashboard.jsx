@@ -11,8 +11,8 @@ export default function Dashboard() {
   const keys = Object.keys(stats.data)
 
   return (
-    <div class="mt-8 sm:mt-12">
-      <dl class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <div className="mt-8 sm:mt-12">
+      <dl className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {keys.map((key) => (
           <Stat key={key} name={startCase(key)} value={Number(stats.data[key]).toLocaleString()} />
         ))}
