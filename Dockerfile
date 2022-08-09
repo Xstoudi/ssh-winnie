@@ -35,4 +35,5 @@ COPY --chown=node:node ./starter.sh ./
 RUN npm ci
 COPY --chown=node:node --from=build /home/node/app/build .
 EXPOSE $PORT
+RUN ["chmod", "+x", "./starter.sh"]
 CMD [ "dumb-init", "./starter.sh" ]
