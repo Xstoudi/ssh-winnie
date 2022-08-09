@@ -92,8 +92,8 @@ export default class HoneypotRun extends BaseCommand {
             console.log('error occured', err.message)
           })
       }
-    ).listen(Number(Env.get('PORT')), '0.0.0.0', () => {
-      console.log(`Winnie listening on port ${Env.get('PORT')}`)
+    ).listen(Number(Env.get('SSH_PORT')), '0.0.0.0', () => {
+      console.log(`Winnie listening on port ${Env.get('SSH_PORT')}`)
     })
   }
 

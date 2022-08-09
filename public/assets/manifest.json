@@ -1,9 +1,6 @@
 {
-  "assets/core.css": "http://localhost:8080/assets/core.css",
-  "assets/core.js": "http://localhost:8080/assets/core.js",
-  "assets/images/logo.png": "http://localhost:8080/assets/images/logo.1217cf8e.png",
-  "assets/core.png": "http://localhost:8080/assets/images/logo.1217cf8e.png",
-  "assets/images/GitHub-Mark-32px.png": "http://localhost:8080/assets/images/GitHub-Mark-32px.0035c307.png",
-  "assets/images/github.png": "http://localhost:8080/assets/images/github.266ca631.png",
-  "assets/images/GitHub-Mark-Light-32px.png": "http://localhost:8080/assets/images/GitHub-Mark-Light-32px.266ca631.png"
+  "assets/core.css": "http://localhost:58340/assets/core.css",
+  "assets/core.js": "http://localhost:58340/assets/core.js",
+  "assets/images/logo.png": "http://localhost:58340/assets/images/logo.1217cf8e.png",
+  "assets/images/github.png": "http://localhost:58340/assets/images/github.266ca631.png"
 }

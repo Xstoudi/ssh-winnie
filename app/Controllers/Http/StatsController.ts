@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { getName } from 'i18n-iso-countries'
+import { DateTime, Interval } from 'luxon'
 
 export default class StatsController {
   public async usernames({ request }: HttpContextContract) {
@@ -106,6 +107,10 @@ export default class StatsController {
   public async dashboard({ request }: HttpContextContract) {
     const maybeHostId = request.qs().host
 
+    const lastMinuteInterval = Interval.before(DateTime.now(), { minute: 1 })
+    const lastHourInterval = Interval.before(DateTime.now(), { hour: 1 })
+    const lastDayInterval = Interval.before(DateTime.now(), { day: 1 })
+
     const queries = [
       Database.from('clean_reports').count('* as population'),
       Database.from('clean_reports').countDistinct('as_country_code as population'),
@@ -113,6 +118,18 @@ export default class StatsController {
       Database.from('clean_reports').countDistinct('password as population'),
       Database.from('clean_reports').countDistinct('as_name as population'),
       Database.from('clean_reports').countDistinct('remote_identity as population'),
+      Database.from('clean_reports')
+        .count('* as population')
+        .whereBetween('created_at', [
+          lastMinuteInterval.start.toSQL(),
+          lastMinuteInterval.end.toSQL(),
+        ]),
+      Database.from('clean_reports')
+        .count('* as population')
+        .whereBetween('created_at', [lastHourInterval.start.toSQL(), lastHourInterval.end.toSQL()]),
+      Database.from('clean_reports')
+        .count('* as population')
+        .whereBetween('created_at', [lastDayInterval.start.toSQL(), lastDayInterval.end.toSQL()]),
     ].map((query) => {
       if (maybeHostId !== undefined) {
         query.where('id_host', maybeHostId)
@@ -130,10 +147,13 @@ export default class StatsController {
       passwords: await stats[3].population,
       asNames: await stats[4].population,
       remoteIdentities: await stats[5].population,
+      lastMinuteAttempts: await stats[6].population,
+      lastHourAttempts: await stats[7].population,
+      lastDayAttempts: await stats[8].population,
     }
   }
 
-  public async hosts(ctx: HttpContextContract) {
+  public async hosts(_ctx: HttpContextContract) {
     return Database.from('hosts').select('*')
   }
 }

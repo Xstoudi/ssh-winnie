@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const localClient = axios.create({
-  baseURL: 'http://localhost:3555',
+  baseURL: 'http://localhost:8080',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -22,7 +22,6 @@ const localRequest = async function (options) {
 }
 
 const externalClient = axios.create({
-  baseURL: 'http://localhost:3555',
   headers: {
     'Content-Type': 'application/json',
   },

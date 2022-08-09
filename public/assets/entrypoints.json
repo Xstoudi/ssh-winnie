@@ -2,10 +2,10 @@
   "entrypoints": {
     "core": {
       "css": [
-        "http://localhost:8080/assets/core.css"
+        "http://localhost:58340/assets/core.css"
       ],
       "js": [
-        "http://localhost:8080/assets/core.js"
+        "http://localhost:58340/assets/core.js"
       ]
     }
   }
