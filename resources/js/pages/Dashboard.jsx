@@ -2,9 +2,11 @@ import startCase from 'lodash.startcase'
 import { useQuery } from '@tanstack/react-query'
 import Stat from '../components/Stat'
 import { getDashboard } from '../services/stats'
+import useHost from '../hooks/useHost'
 
 export default function Dashboard() {
-  const stats = useQuery(['dashboard'], getDashboard)
+  const [host] = useHost()
+  const stats = useQuery(['stats-dashboard', host.id], getDashboard(host.id))
 
   if (stats.isError || stats.isLoading) return <h1>Loading...</h1>
 

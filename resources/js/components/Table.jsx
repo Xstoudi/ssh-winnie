@@ -27,6 +27,7 @@ export default function Table({ columns, datas }) {
                     align === 'right' ? 'text-right' : 'text-left'
                   )}
                   key={key}
+                  title={data[key]}
                 >
                   {format(data[key])}
                 </td>

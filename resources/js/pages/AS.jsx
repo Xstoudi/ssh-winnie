@@ -1,20 +1,29 @@
 import { useQuery } from '@tanstack/react-query'
-import BarChart from '../components/BarChart'
+import { scalePow } from 'd3'
+import { useResizeDetector } from 'react-resize-detector'
 
+import BarChart from '../components/BarChart'
 import Table from '../components/Table'
+import useHost from '../hooks/useHost'
 import { getAS } from '../services/stats'
 import trimLabel from '../utils/trimLabel'
 
 export default function AS() {
-  const as = useQuery(['as'], getAS)
+  const [host] = useHost()
+  const as = useQuery(['stats-as', host.id], getAS(host.id))
+  const { height = 800, ref: heightWatchedRef } = useResizeDetector({
+    refreshMode: 'debounce',
+    refreshRate: 200,
+  })
+
   if (as.isError || as.isLoading) return <h1>Loading...</h1>
 
   return (
     <div className="flex">
-      <div>
+      <div ref={heightWatchedRef}>
         <Table
           columns={[
-            { label: 'AS name', key: 'asName' },
+            { label: 'AS name', key: 'asName', format: (x) => trimLabel(x) },
             {
               label: 'Attempts',
               key: 'population',
@@ -33,6 +42,8 @@ export default function AS() {
           marginLeft={175}
           color="#999"
           titleColor="black"
+          height={height}
+          xType={scalePow}
         />
       </div>
     </div>

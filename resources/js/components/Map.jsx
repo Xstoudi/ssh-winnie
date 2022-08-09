@@ -13,8 +13,8 @@ function buildColorScale(countries) {
     [
       0,
       1,
-      mean(countries.map((country) => country.population)) || 0,
-      max(countries.map((country) => country.population)) || 0,
+      mean(countries.map((country) => country.population)) || Number.MAX_SAFE_INTEGER,
+      max(countries.map((country) => country.population)) || Number.MAX_VALUE,
     ],
     ['#f5f5f5', '#f4c0b6', '#f17b6c', '#b33656']
   )

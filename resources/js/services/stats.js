@@ -1,25 +1,35 @@
 import request from '../deps/request'
 
-export function getDashboard() {
-  return request({ url: '/stats/dashboard' })
+function addQueryParam(hostId = '-1') {
+  return hostId === '-1' ? '' : `?host=${hostId}`
 }
 
-export function getCountries() {
-  return request({ url: '/stats/countries' })
+export function getDashboard(hostId) {
+  return () => {
+    return request({ url: `/stats/dashboard${addQueryParam(hostId)}` })
+  }
 }
 
-export function getUsernames() {
-  return request({ url: '/stats/usernames' })
+export function getCountries(hostId) {
+  return () => request({ url: `/stats/countries${addQueryParam(hostId)}` })
 }
 
-export function getPasswords() {
-  return request({ url: '/stats/passwords' })
+export function getUsernames(hostId) {
+  return () => request({ url: `/stats/usernames${addQueryParam(hostId)}` })
 }
 
-export function getIdentities() {
-  return request({ url: '/stats/identities' })
+export function getPasswords(hostId) {
+  return () => request({ url: `/stats/passwords${addQueryParam(hostId)}` })
 }
 
-export function getAS() {
-  return request({ url: '/stats/autonomous-systems/names' })
+export function getIdentities(hostId) {
+  return () => request({ url: `/stats/identities${addQueryParam(hostId)}` })
+}
+
+export function getAS(hostId) {
+  return () => request({ url: `/stats/autonomous-systems/names${addQueryParam(hostId)}` })
+}
+
+export function getHosts() {
+  return request({ url: '/stats/hosts' })
 }

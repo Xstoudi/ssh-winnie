@@ -2,11 +2,13 @@ import { useQuery } from '@tanstack/react-query'
 
 import Map from '../components/Map'
 import Table from '../components/Table'
+import useHost from '../hooks/useHost'
 import { getCountriesData } from '../services/countries'
 import { getCountries } from '../services/stats'
 
 export default function Countries() {
-  const countriesStats = useQuery(['countries'], getCountries)
+  const [host] = useHost()
+  const countriesStats = useQuery(['stats-countries', host.id], getCountries(host.id))
   const countriesData = useQuery(['countries-data'], getCountriesData)
   if (
     countriesStats.isError ||

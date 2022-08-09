@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import logo from '../../images/logo.png'
 import github from '../../images/github.png'
+import Dropdown from '../components/HostDropdown'
 
 export default function Header() {
   return (
@@ -56,6 +57,8 @@ export default function Header() {
 
             <div className="flex items-center gap-4">
               <div className="sm:gap-4 sm:flex">
+                <Dropdown />
+
                 <div className="hidden sm:flex">
                   <a
                     target="_blank"

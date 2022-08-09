@@ -1,9 +1,9 @@
-import { map, select, scaleLinear, scaleBand, axisTop, axisLeft, max, range, InternSet } from 'd3'
+import { map, scaleLinear, scaleBand, axisTop, axisLeft, max, range, InternSet } from 'd3'
+import { useRef } from 'react'
+import { useResizeDetector } from 'react-resize-detector'
+
 import useD3 from '../hooks/useD3'
 import trimLabel from '../utils/trimLabel'
-
-const width = 800
-const height = 400
 
 export default function BarChart({
   data,
@@ -12,11 +12,11 @@ export default function BarChart({
   title,
   marginTop = 30,
   marginRight = 0,
-  marginBottom = 10,
+  marginBottom = 30,
   marginLeft = 30,
   xType = scaleLinear,
   xDomain,
-  xRange = [marginLeft, width - marginRight],
+  xRange,
   xFormat,
   xLabel,
   yPadding = 0.1,
@@ -25,7 +25,13 @@ export default function BarChart({
   color = 'currentColor',
   titleColor = 'white',
   titleAltColor = 'currentColor',
+  height = 400,
 }) {
+  const { width = 800, ref: widthWatchedRef } = useResizeDetector({
+    refreshMode: 'debounce',
+    refreshRate: 200,
+  })
+
   const ref = useD3(
     (svg) => {
       const X = map(data, x)
@@ -37,28 +43,25 @@ export default function BarChart({
 
       const I = range(X.length).filter((i) => yDomain.has(Y[i]))
 
-      if (height === undefined)
-        height = Math.ceil((yDomain.size + yPadding) * 25) + marginTop + marginBottom
+      if (xRange === undefined) xRange = [marginLeft, width - marginRight - marginLeft]
       if (yRange === undefined) yRange = [marginTop, height - marginBottom]
 
-      const xScale = xType(xDomain, xRange)
+      const xScale = xType(xDomain, xRange).exponent(0.3)
       const yScale = scaleBand(yDomain, yRange).padding(yPadding)
-      const xAxis = axisTop(xScale).ticks(width / 80, xFormat)
-      const yAxis = axisLeft(yScale)
-        .tickSizeOuter(0)
-        .tickFormat((d) => trimLabel(d))
+      const xAxis = axisTop(xScale).ticks((width - marginLeft - marginRight) / 160, xFormat)
+      const yAxis = axisLeft(yScale).tickSizeOuter(0)
 
       if (title === undefined) {
         const formatValue = xScale.tickFormat(100, xFormat)
         title = (i) => `${formatValue(X[i])}`
       } else {
         const O = map(data, (d) => d)
-        const T = title
-        title = (i) => T(O[i], i, data)
+        title = (i) => title(O[i], i, data)
       }
 
-      select('.x-axis')
-        .attr('transform', `translate(0,${marginTop})`)
+      svg
+        .select('.x-axis')
+        .attr('transform', `translate(0, ${marginTop})`)
         .call(xAxis)
         .call((g) => g.select('.domain').remove())
         .call((g) =>
@@ -68,17 +71,11 @@ export default function BarChart({
             .attr('y2', height - marginTop - marginBottom)
             .attr('stroke-opacity', 0.1)
         )
-        .call((g) =>
-          g
-            .append('text')
-            .attr('x', width - marginRight)
-            .attr('y', -22)
-            .attr('fill', 'currentColor')
-            .attr('text-anchor', 'end')
-            .text(xLabel)
-        )
+        .selectAll('text')
+        .attr('transform', 'rotate(-45)')
 
-      select('.plot-area')
+      svg
+        .select('.plot-area')
         .attr('fill', color)
         .selectAll('rect')
         .data(I)
@@ -88,7 +85,8 @@ export default function BarChart({
         .attr('width', (i) => xScale(X[i]) - xScale(0))
         .attr('height', yScale.bandwidth())
 
-      select('.y-axis')
+      svg
+        .select('.smoll')
         .attr('fill', titleColor)
         .attr('text-anchor', 'end')
         .attr('font-family', 'sans-serif')
@@ -108,17 +106,36 @@ export default function BarChart({
             .attr('fill', titleAltColor)
             .attr('text-anchor', 'start')
         )
-      select('.y-axis').attr('transform', `translate(${marginLeft},0)`).call(yAxis)
+
+      svg
+        .select('.y-axis')
+        .attr('transform', `translate(${marginLeft},0) `)
+        .call(yAxis)
+        .selectAll('text')
+        .html('')
+        .append('tspan')
+        .text(trimLabel)
     },
-    [data.length]
+    [data.length, width, height]
   )
 
   return (
-    <svg ref={ref} viewBox={`0 0 ${width} ${height}`} fill="currentColor">
-      <g className="plot-area" />
-      <g className="x-axis" />
-      <g className="y-axis" />
-      <g className="grid" />
-    </svg>
+    <div className="flex-1 flex flex-col" ref={widthWatchedRef}>
+      <svg
+        ref={ref}
+        viewBox={`0 0 ${width} ${height}`}
+        fill="currentColor"
+        style={{
+          width: `100%`,
+          height: `${height}px`,
+        }}
+      >
+        <g className="plot-area" />
+        <g className="x-axis" />
+        <g className="y-axis" />
+        <g className="grid" />
+        <g className="smoll" />
+      </svg>
+    </div>
   )
 }

@@ -8,6 +8,7 @@ Route.group(() => {
   Route.get('/passwords', 'StatsController.passwords')
   Route.get('/identities', 'StatsController.identities')
   Route.get('/autonomous-systems/names', 'StatsController.asNames')
+  Route.get('/hosts', 'StatsController.hosts')
 }).prefix('/stats')
 
 Route.get('*', async ({ view }: HttpContextContract) => {
