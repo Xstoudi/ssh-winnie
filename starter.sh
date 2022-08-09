@@ -1,8 +1,12 @@
 #!/bin/ash
 
 node ace honeypot:run &
-node server.js &
+if [ "$ENABLE_DASHBOARD" = "true" ]; then
+  node server.js &
+else
+  echo "Dashboard is disabled" &
+fi
 
-wait -n
+wait
 
 exit $?
