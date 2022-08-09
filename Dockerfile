@@ -29,6 +29,7 @@ ENV PG_USER=$PG_USER
 ENV PG_PASSWORD=$PG_PASSWORD
 ENV PG_DB_NAME=$PG_DB_NAME
 ENV WINNIE_NAME=$WINNIE_NAME
+ENV ENABLE_DASHBOARD=true
 COPY --chown=node:node ./package*.json ./
 COPY --chown=node:node ./starter.sh ./
 RUN npm ci
