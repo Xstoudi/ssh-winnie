@@ -19,6 +19,7 @@ RUN node ace build --production
 FROM base AS production
 ENV HOST=0.0.0.0
 ENV PORT=$PORT
+ENV SSH_PORT=$SSH_PORT
 ENV APP_KEY=$APP_KEY
 ENV NODE_ENV=development
 ENV DB_CONNECTION=pg
@@ -29,7 +30,8 @@ ENV PG_PASSWORD=$PG_PASSWORD
 ENV PG_DB_NAME=$PG_DB_NAME
 ENV WINNIE_NAME=$WINNIE_NAME
 COPY --chown=node:node ./package*.json ./
+COPY --chown=node:node ./starter.sh ./
 RUN npm ci
 COPY --chown=node:node --from=build /home/node/app/build .
 EXPOSE $PORT
-CMD [ "dumb-init", "node", "ace", "honeypot:run" ]
+CMD [ "dumb-init", "./starter.sh" ]

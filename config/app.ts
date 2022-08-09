@@ -4,6 +4,8 @@ import { ServerConfig } from '@ioc:Adonis/Core/Server'
 import { LoggerConfig } from '@ioc:Adonis/Core/Logger'
 import { ProfilerConfig } from '@ioc:Adonis/Core/Profiler'
 import { ValidatorConfig } from '@ioc:Adonis/Core/Validator'
+import { AssetsManagerConfig } from '@ioc:Adonis/Core/AssetsManager'
+import Application from '@ioc:Adonis/Core/Application'
 
 export const appKey: string = Env.get('APP_KEY')
 
@@ -38,3 +40,18 @@ export const profiler: ProfilerConfig = {
 }
 
 export const validator: ValidatorConfig = {}
+
+export const assets: AssetsManagerConfig = {
+  driver: 'encore',
+  publicPath: Application.publicPath('assets'),
+
+  script: {
+    attributes: {
+      defer: true,
+    },
+  },
+
+  style: {
+    attributes: {},
+  },
+}

@@ -28,7 +28,8 @@
     "types": [
       "@adonisjs/core",
       "@japa/preset-adonis/build/adonis-typings",
-      "@adonisjs/lucid"
+      "@adonisjs/lucid",
+      "@adonisjs/view"
     ]
   }
 }
