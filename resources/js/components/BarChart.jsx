@@ -73,6 +73,7 @@ export default function BarChart({
         )
         .selectAll('text')
         .attr('transform', 'rotate(-45)')
+        .attr('font-size', '1.5em')
 
       svg
         .select('.plot-area')
@@ -84,6 +85,7 @@ export default function BarChart({
         .attr('y', (i) => yScale(Y[i]))
         .attr('width', (i) => xScale(X[i]) - xScale(0))
         .attr('height', yScale.bandwidth())
+        .attr('fill', '#2563eb')
 
       svg
         .select('.smoll')
@@ -106,15 +108,18 @@ export default function BarChart({
             .attr('fill', titleAltColor)
             .attr('text-anchor', 'start')
         )
+        .attr('font-size', '1.5em')
 
       svg
         .select('.y-axis')
         .attr('transform', `translate(${marginLeft},0) `)
         .call(yAxis)
         .selectAll('text')
+        .attr('title', (i) => `${i}`)
         .html('')
         .append('tspan')
         .text(trimLabel)
+        .attr('font-size', '1.5em')
     },
     [data.length, width, height]
   )
