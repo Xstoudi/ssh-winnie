@@ -36,7 +36,7 @@ export default function Map({ countries, svgData }) {
         country.properties = properties
         return country
       }),
-    [svgData]
+    [svgData, countries]
   )
 
   const colorScale = useMemo(() => buildColorScale(countries), [countries])
