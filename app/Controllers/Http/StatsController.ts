@@ -3,8 +3,6 @@ import Database from '@ioc:Adonis/Lucid/Database'
 import { getName } from 'i18n-iso-countries'
 import { DateTime, Interval } from 'luxon'
 import { Stringifier } from 'csv-stringify'
-import { Duplex, PassThrough, Writable } from 'stream'
-import { WritableStream } from 'stream/web'
 
 const PER_PAGE = 20
 
