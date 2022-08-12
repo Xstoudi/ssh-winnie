@@ -2,6 +2,11 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { getName } from 'i18n-iso-countries'
 import { DateTime, Interval } from 'luxon'
+import { Stringifier } from 'csv-stringify'
+import { Duplex, PassThrough, Writable } from 'stream'
+import { WritableStream } from 'stream/web'
+
+const PER_PAGE = 20
 
 export default class StatsController {
   public async usernames({ request }: HttpContextContract) {
@@ -155,5 +160,55 @@ export default class StatsController {
 
   public async hosts(_ctx: HttpContextContract) {
     return Database.from('hosts').select('*')
+  }
+
+  public async reports({ request }: HttpContextContract) {
+    const { address, identity, country, asName, asn, host, page = 0 } = request.qs()
+
+    const query = Database.from('clean_reports')
+
+    if (address !== undefined) query.whereLike('remote_addr', `%${address}%`)
+    if (identity !== undefined) query.whereLike('remote_identity', `%${identity}%`)
+    if (country !== undefined) query.whereLike('as_country_code', `%${country}%`)
+    if (asName !== undefined) query.whereLike('as_name', `%${asName}%`)
+    if (asn !== undefined) query.whereLike('asn', `%${asn}%`)
+    if (host !== undefined) query.whereLike('host', `%${host}%`)
+
+    return query.paginate(page, PER_PAGE)
+  }
+
+  public async exportReports({ request, response }: HttpContextContract) {
+    const { address, identity, country, asName, asn, host } = request.qs()
+
+    const query = Database.from('clean_reports')
+    if (address !== undefined) query.whereLike('remote_addr', `%${address}%`)
+    if (identity !== undefined) query.whereLike('remote_identity', `%${identity}%`)
+    if (country !== undefined) query.whereLike('as_country_code', `%${country}%`)
+    if (asName !== undefined) query.whereLike('as_name', `%${asName}%`)
+    if (asn !== undefined) query.whereLike('asn', `%${asn}%`)
+    if (host !== undefined) query.whereLike('host', `%${host}%`)
+
+    response.header('Content-Type', 'text/csv')
+    response.header('Content-Disposition', 'attachment; filename="reports.csv"')
+
+    const csv = new Stringifier({
+      header: true,
+      columns: {
+        id: 'id',
+        username: 'username',
+        password: 'password',
+        remote_addr: 'remote_addr',
+        remote_identity: 'remote_identity',
+        id_range: 'id_range',
+        as_country_code: 'as_country_code',
+        as_name: 'as_name',
+        asn: 'asn',
+        host: 'host',
+        created_at: 'created_at',
+      },
+    })
+
+    query.toSQL() // FIXME: https://github.com/adonisjs/lucid/issues/865
+    return response.stream(query.knexQuery.stream().pipe(csv))
   }
 }

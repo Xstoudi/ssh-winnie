@@ -52,6 +52,11 @@ export default function Header() {
                     Identities
                   </Link>
                 </li>
+                <li>
+                  <Link to={'/reports'} className="text-white transition hover:text-white/75">
+                    Reports
+                  </Link>
+                </li>
               </ul>
             </nav>
 

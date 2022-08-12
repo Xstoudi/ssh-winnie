@@ -9,6 +9,7 @@ import Identities from './pages/Identities'
 import Passwords from './pages/Passwords'
 import Usernames from './pages/Usernames'
 import { getHosts } from './services/stats'
+import Reports from './pages/Reports'
 
 const defaultHost = { id: '-1', name: 'All' }
 
@@ -41,6 +42,8 @@ export default function Winnie() {
               <Route path="/passwords" element={<Passwords />} />
               <Route path="/as" element={<AS />} />
               <Route path="/identities" element={<Identities />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/reports/:page" element={<Reports />} />
             </Routes>
           </div>
         </div>
