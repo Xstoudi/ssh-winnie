@@ -100,7 +100,7 @@ export default class HoneypotRun extends BaseCommand {
                     params: {
                       ip: remoteAddr,
                       categories: '18,22',
-                      comment: `SSH login attempts ${username}:${password}. Reported by ssh-winnie.`,
+                      comment: `SSH login attempt "${username}:${password}". Reported by ssh-winnie.`,
                     },
                     headers: {
                       key: Env.get('ABUSEIP_API_KEY'),
