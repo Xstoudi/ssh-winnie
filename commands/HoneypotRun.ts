@@ -74,8 +74,8 @@ export default class HoneypotRun extends BaseCommand {
                 return client.end()
               })
 
-            asnPromise.then((asn) => {
-              return Database.table('reports').insert({
+            asnPromise.then((asn) =>
+              Database.table('reports').insert({
                 username: `${username}`,
                 password: `${password}`,
                 remote_addr: `${remoteAddr}`,
@@ -84,7 +84,7 @@ export default class HoneypotRun extends BaseCommand {
                 id_host: winnieId,
                 created_at: k.fn.now(),
               })
-            })
+            )
 
             if (Env.get('ABUSEIP_API_KEY'))
               asnPromise.then(() => {
@@ -101,7 +101,7 @@ export default class HoneypotRun extends BaseCommand {
                     params: {
                       ip: remoteAddr,
                       categories: '18,22',
-                      comment: `SSH login attempt "${username}:${password}". Reported by ssh-winnie.`,
+                      comment: `SSH login attempt. Reported by ssh-winnie.`,
                     },
                     headers: {
                       key: Env.get('ABUSEIP_API_KEY'),
