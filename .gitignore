@@ -5,5 +5,5 @@ coverage
 .DS_STORE
 .env
 tmp
-./host*
+host*
 public/assets

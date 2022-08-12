@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react'
 import { DateTime } from 'luxon'
 
 import { getReports } from '../services/reports'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, Navigate } from 'react-router-dom'
 import clsx from 'clsx'
 import trimLabel from '../utils/trimLabel'
 
@@ -45,7 +45,7 @@ export default function Reports() {
   }, [address, identity, country, asName, asn, host])
 
   if (!isLoading && data?.meta.last_page < page) {
-    return <Redirect to={`/reports/${data.meta.last_page}`} />
+    return <Navigate to={`/reports/${data.meta.last_page}`} />
   }
 
   return (

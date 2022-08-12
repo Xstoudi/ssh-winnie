@@ -5,6 +5,7 @@ import { existsSync, readFileSync } from 'fs'
 import { PasswordAuthContext, Server } from 'ssh2'
 import keygen from 'ssh-keygen-lite'
 import knex from 'knex'
+import axios from 'axios'
 
 const k = knex({ client: 'postgres' })
 
@@ -12,6 +13,8 @@ const REGEXP_IP =
   /\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/
 
 let winnieId = null
+
+const alreadyReportedCache = []
 
 export default class HoneypotRun extends BaseCommand {
   public static commandName = 'honeypot:run'
@@ -60,33 +63,61 @@ export default class HoneypotRun extends BaseCommand {
             const remoteIdent = clientInfo.header.identRaw
             const ipInt = this.toInt(remoteAddr)
 
-            Database.query()
+            const asnPromise = Database.query()
               .from('ranges')
               .select('id')
               .where('range_start', '<=', ipInt)
               .andWhere('range_end', '>=', ipInt)
-              .first()
-              .then((asn) => {
-                if (asn === null) {
-                  console.log(`${remoteAddr} is not in any range`)
-                  return client.end()
-                }
-
-                Database.table('reports')
-                  .insert({
-                    username: `${username}`,
-                    password: `${password}`,
-                    remote_addr: `${remoteAddr}`,
-                    remote_identity: `${remoteIdent}`,
-                    id_range: asn.id,
-                    id_host: winnieId,
-                    created_at: k.fn.now(),
-                  })
-                  .finally(() => ctx.reject(['password']))
+              .firstOrFail()
+              .catch(() => {
+                console.log(`${remoteAddr} is not in any range`)
+                return client.end()
               })
+
+            asnPromise.then((asn) => {
+              Database.table('reports').insert({
+                username: `${username}`,
+                password: `${password}`,
+                remote_addr: `${remoteAddr}`,
+                remote_identity: `${remoteIdent}`,
+                id_range: asn.id,
+                id_host: winnieId,
+                created_at: k.fn.now(),
+              })
+            })
+
+            if (Env.get('ABUSEIP_API_KEY'))
+              asnPromise.then(() => {
+                Object.keys(alreadyReportedCache).forEach((key) => {
+                  if (Date.now() - alreadyReportedCache[key] > 30 * 60 * 1000) {
+                    delete alreadyReportedCache[key]
+                  }
+                })
+
+                if (alreadyReportedCache[remoteAddr] === undefined) {
+                  axios('https://api.abuseipdb.com/api/v2/report', {
+                    method: 'POST',
+                    params: {
+                      ip: remoteAddr,
+                      categories: '18,22',
+                      comment: `SSH login attempts ${username}:${password}. Reported by ssh-winnie.`,
+                    },
+                    headers: {
+                      key: Env.get('ABUSEIP_API_KEY'),
+                    },
+                    validateStatus: (status) => status >= 200 && status < 400,
+                  }).catch((err) =>
+                    console.log(`Error while reporting to abuseip, ${JSON.stringify(err.toJSON())}`)
+                  )
+                  alreadyReportedCache[remoteAddr] = Date.now()
+                }
+              })
+
+            asnPromise
               .catch((err) => {
                 throw err
               })
+              .finally(() => ctx.reject(['password']))
           })
           .on('error', (err) => {
             console.log('error occured', err.message)
