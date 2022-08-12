@@ -75,7 +75,7 @@ export default class HoneypotRun extends BaseCommand {
               })
 
             asnPromise.then((asn) => {
-              Database.table('reports').insert({
+              return Database.table('reports').insert({
                 username: `${username}`,
                 password: `${password}`,
                 remote_addr: `${remoteAddr}`,
@@ -95,7 +95,8 @@ export default class HoneypotRun extends BaseCommand {
                 })
 
                 if (alreadyReportedCache[remoteAddr] === undefined) {
-                  axios('https://api.abuseipdb.com/api/v2/report', {
+                  alreadyReportedCache[remoteAddr] = Date.now()
+                  return axios('https://api.abuseipdb.com/api/v2/report', {
                     method: 'POST',
                     params: {
                       ip: remoteAddr,
@@ -109,7 +110,6 @@ export default class HoneypotRun extends BaseCommand {
                   }).catch((err) =>
                     console.log(`Error while reporting to abuseip, ${JSON.stringify(err.toJSON())}`)
                   )
-                  alreadyReportedCache[remoteAddr] = Date.now()
                 }
               })
 
