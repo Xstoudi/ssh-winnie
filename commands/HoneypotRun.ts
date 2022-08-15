@@ -6,6 +6,10 @@ import { PasswordAuthContext, Server } from 'ssh2'
 import keygen from 'ssh-keygen-lite'
 import knex from 'knex'
 import axios from 'axios'
+import geolite2 from 'geolite2'
+import maxmind, { AsnResponse, CountryResponse, Reader } from 'maxmind'
+
+const geolitePaths: any = geolite2.paths
 
 const k = knex({ client: 'postgres' })
 
@@ -20,12 +24,18 @@ export default class HoneypotRun extends BaseCommand {
   public static commandName = 'honeypot:run'
   public static description = ''
 
+  private countryLookup: Reader<CountryResponse>
+  private asnLookup: Reader<AsnResponse>
+
   public static settings = {
     loadApp: true,
     stayAlive: true,
   }
 
   public async run() {
+    this.countryLookup = await maxmind.open(geolitePaths.country)
+    this.asnLookup = await maxmind.open(geolitePaths.asn)
+
     await this.setup()
     this.runServer()
   }
@@ -61,33 +71,28 @@ export default class HoneypotRun extends BaseCommand {
             const password = (ctx as unknown as PasswordAuthContext).password
             const remoteAddr = clientInfo.ip
             const remoteIdent = clientInfo.header.identRaw
-            const ipInt = this.toInt(remoteAddr)
 
-            const asnPromise = Database.query()
-              .from('ranges')
-              .select('id')
-              .where('range_start', '<=', ipInt)
-              .andWhere('range_end', '>=', ipInt)
-              .firstOrFail()
-              .catch(() => {
-                console.log(`${remoteAddr} is not in any range`)
-                return client.end()
-              })
+            const country = this.countryLookup.get(remoteAddr)
+            const asn = this.asnLookup.get(remoteAddr)
 
-            asnPromise.then((asn) =>
-              Database.table('reports').insert({
+            const basePromise = Promise.resolve(1)
+
+            basePromise.then(() =>
+              Database.table('new_reports').insert({
                 username: `${username}`,
                 password: `${password}`,
                 remote_addr: `${remoteAddr}`,
                 remote_identity: `${remoteIdent}`,
-                id_range: asn.id,
+                country_code: country?.country?.iso_code,
+                as_name: asn?.autonomous_system_organization,
+                asn: asn?.autonomous_system_number,
                 id_host: winnieId,
                 created_at: k.fn.now(),
               })
             )
 
             if (Env.get('ABUSEIP_API_KEY'))
-              asnPromise.then(() => {
+              basePromise.then(() => {
                 Object.keys(alreadyReportedCache).forEach((key) => {
                   if (Date.now() - alreadyReportedCache[key] > 30 * 60 * 1000) {
                     delete alreadyReportedCache[key]
@@ -113,7 +118,7 @@ export default class HoneypotRun extends BaseCommand {
                 }
               })
 
-            asnPromise
+            basePromise
               .catch((err) => {
                 throw err
               })

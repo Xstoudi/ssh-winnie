@@ -188,7 +188,9 @@ export default function Reports() {
                   <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
                     {trimLabel(report.username)}
                   </td>
-                  <td className="px-4 py-2 text-gray-700 whitespace-nowrap">{report.password}</td>
+                  <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
+                    {trimLabel(report.password)}
+                  </td>
                   <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
                     {report.remote_addr}
                   </td>
