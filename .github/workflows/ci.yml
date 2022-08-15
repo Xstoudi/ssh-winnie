@@ -19,9 +19,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
-        env:
-          MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
         uses: docker/build-push-action@v3
         with:
           push: true
           tags: xstoudi/winnie:latest
+          secrets: |
+            "MAXMIND_LICENSE_KEY=${{ secrets.MAXMIND_LICENSE_KEY }}"
