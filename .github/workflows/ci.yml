@@ -23,5 +23,5 @@ jobs:
         with:
           push: true
           tags: xstoudi/winnie:latest
-          secrets: |
-            "MAXMIND_LICENSE_KEY=${{ secrets.MAXMIND_LICENSE_KEY }}"
+          build-args: |
+            MAXMIND_LICENSE_KEY=${{ secrets.MAXMIND_LICENSE_KEY }}

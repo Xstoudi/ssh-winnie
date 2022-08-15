@@ -1,5 +1,7 @@
 ARG NODE_IMAGE=node:18.4.0-alpine
 
+ARG MAXMIND_LICENSE_KEY
+
 FROM $NODE_IMAGE AS base
 RUN apk --no-cache add dumb-init
 RUN apk --no-cache add openssh
@@ -32,9 +34,6 @@ ENV PG_DB_NAME=$PG_DB_NAME
 ENV WINNIE_NAME=$WINNIE_NAME
 ENV ENABLE_DASHBOARD=true
 ENV MAXMIND_LICENSE_KEY=$MAXMIND_LICENSE_KEY
-
-RUN --mount=type=secret,id=MAXMIND_LICENSE_KEY \
-  export MAXMIND_LICENSE_KEY=$(cat /run/secrets/MAXMIND_LICENSE_KEY)
 
 COPY --chown=node:node ./package*.json ./
 COPY --chown=node:node ./starter.sh ./
