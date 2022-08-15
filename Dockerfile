@@ -1,6 +1,6 @@
 ARG NODE_IMAGE=node:18.4.0-alpine
 
-ARG MAXMIND_LICENSE_KEY
+ARG MAXMIND_LICENSE_KEY_ARG
 
 FROM $NODE_IMAGE AS base
 RUN apk --no-cache add dumb-init
@@ -11,7 +11,7 @@ USER node
 RUN mkdir tmp
 
 FROM base AS dependencies
-ENV MAXMIND_LICENSE_KEY=$MAXMIND_LICENSE_KEY
+ENV MAXMIND_LICENSE_KEY=$MAXMIND_LICENSE_KEY_ARG
 COPY --chown=node:node ./package*.json ./
 RUN npm i
 COPY --chown=node:node . .
@@ -33,7 +33,7 @@ ENV PG_PASSWORD=$PG_PASSWORD
 ENV PG_DB_NAME=$PG_DB_NAME
 ENV WINNIE_NAME=$WINNIE_NAME
 ENV ENABLE_DASHBOARD=true
-ENV MAXMIND_LICENSE_KEY=$MAXMIND_LICENSE_KEY
+ENV MAXMIND_LICENSE_KEY=$MAXMIND_LICENSE_KEY_ARG
 
 COPY --chown=node:node ./package*.json ./
 COPY --chown=node:node ./starter.sh ./

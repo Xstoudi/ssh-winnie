@@ -24,4 +24,4 @@ jobs:
           push: true
           tags: xstoudi/winnie:latest
           build-args: |
-            MAXMIND_LICENSE_KEY=${{ secrets.MAXMIND_LICENSE_KEY }}
+            MAXMIND_LICENSE_KEY_ENV=${{ secrets.MAXMIND_LICENSE_KEY }}
