@@ -6,10 +6,7 @@ import { PasswordAuthContext, Server } from 'ssh2'
 import keygen from 'ssh-keygen-lite'
 import knex from 'knex'
 import axios from 'axios'
-import geolite2 from 'geolite2'
 import maxmind, { AsnResponse, CountryResponse, Reader } from 'maxmind'
-
-const geolitePaths: any = geolite2.paths
 
 const k = knex({ client: 'postgres' })
 
@@ -33,8 +30,14 @@ export default class HoneypotRun extends BaseCommand {
   }
 
   public async run() {
-    this.countryLookup = await maxmind.open(geolitePaths.country)
-    this.asnLookup = await maxmind.open(geolitePaths.asn)
+    const geolite2: typeof import('geolite2-redist') = await Function(
+      'return import("geolite2-redist")'
+    )()
+
+    this.countryLookup = await geolite2.open(geolite2.GeoIpDbName.Country, (dbPath) =>
+      maxmind.open(dbPath)
+    )
+    this.asnLookup = await geolite2.open(geolite2.GeoIpDbName.ASN, (dbPath) => maxmind.open(dbPath))
 
     await this.setup()
     this.runServer()
@@ -69,7 +72,7 @@ export default class HoneypotRun extends BaseCommand {
             }
 
             const password = (ctx as unknown as PasswordAuthContext).password
-            const remoteAddr = clientInfo.ip
+            const remoteAddr = '91.80.137.184' //clientInfo.ip
             const remoteIdent = clientInfo.header.identRaw
 
             const country = this.countryLookup.get(remoteAddr)
@@ -78,7 +81,7 @@ export default class HoneypotRun extends BaseCommand {
             const basePromise = Promise.resolve(1)
 
             basePromise.then(() =>
-              Database.table('new_reports').insert({
+              Database.table('reports').insert({
                 username: `${username}`,
                 password: `${password}`,
                 remote_addr: `${remoteAddr}`,

@@ -7,7 +7,8 @@
     "build": "node ace build --production",
     "start": "node server.js",
     "lint": "eslint . --ext=.ts",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "preload": "node -e \"import('geolite2-redist').then(geolite => geolite.downloadDbs())\""
   },
   "eslintConfig": {
     "extends": [
@@ -81,7 +82,7 @@
     "d3": "^6.7.0",
     "d3-geo": "^3.0.1",
     "d3-selection": "^2.0.0",
-    "geolite2": "^3.5.1",
+    "geolite2-redist": "^3.0.2",
     "i18n-iso-countries": "^7.5.0",
     "knex": "^2.2.0",
     "lodash.startcase": "^4.4.0",
