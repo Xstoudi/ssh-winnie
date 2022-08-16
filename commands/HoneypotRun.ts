@@ -10,9 +10,6 @@ import maxmind, { AsnResponse, CountryResponse, Reader } from 'maxmind'
 
 const k = knex({ client: 'postgres' })
 
-const REGEXP_IP =
-  /\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/
-
 let winnieId = null
 
 const alreadyReportedCache = []
