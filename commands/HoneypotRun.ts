@@ -72,7 +72,7 @@ export default class HoneypotRun extends BaseCommand {
             }
 
             const password = (ctx as unknown as PasswordAuthContext).password
-            const remoteAddr = '91.80.137.184' //clientInfo.ip
+            const remoteAddr = clientInfo.ip
             const remoteIdent = clientInfo.header.identRaw
 
             const country = this.countryLookup.get(remoteAddr)
@@ -86,9 +86,11 @@ export default class HoneypotRun extends BaseCommand {
                 password: `${password}`,
                 remote_addr: `${remoteAddr}`,
                 remote_identity: `${remoteIdent}`,
-                country_code: country?.country?.iso_code,
-                as_name: asn?.autonomous_system_organization,
-                asn: asn?.autonomous_system_number,
+                country_code: country?.country?.iso_code ? country?.country?.iso_code : null,
+                as_name: asn?.autonomous_system_organization
+                  ? asn?.autonomous_system_organization
+                  : null,
+                asn: asn?.autonomous_system_number ? asn?.autonomous_system_number : null,
                 id_host: winnieId,
                 created_at: k.fn.now(),
               })
