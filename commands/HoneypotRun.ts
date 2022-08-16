@@ -150,23 +150,4 @@ export default class HoneypotRun extends BaseCommand {
     }
     return readFileSync(keyName)
   }
-
-  private toInt(ip: string): number {
-    if (!ip) {
-      throw new Error('E_UNDEFINED_IP')
-    }
-
-    if (!REGEXP_IP.test(ip)) {
-      throw new Error('E_INVALID_IP')
-    }
-
-    return ip
-      .split('.')
-      .map((octet, index, array) => {
-        return parseInt(octet) * Math.pow(256, array.length - index - 1)
-      })
-      .reduce((prev, curr) => {
-        return prev + curr
-      })
-  }
 }
