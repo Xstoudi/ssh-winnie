@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "Xstoudi",
+      "name": "Xavier Stouder",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2575182?v=4",
+      "profile": "https://stouder.io",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "ssh-winnie",
+  "projectOwner": "Xstoudi",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
