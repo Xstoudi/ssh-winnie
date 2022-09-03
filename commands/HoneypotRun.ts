@@ -115,7 +115,9 @@ export default class HoneypotRun extends BaseCommand {
                     },
                     validateStatus: (status) => status >= 200 && status < 400,
                   }).catch((err) =>
-                    console.log(`Error while reporting to abuseip, ${JSON.stringify(err.toJSON())}`)
+                    this.logger.error(
+                      `Error while reporting to abuseip, ${JSON.stringify(err.toJSON())}`
+                    )
                   )
                 }
               })
@@ -127,11 +129,11 @@ export default class HoneypotRun extends BaseCommand {
               .finally(() => ctx.reject(['password']))
           })
           .on('error', (err) => {
-            console.log('error occured', err.message)
+            this.logger.error(err)
           })
       }
-    ).listen(Number(Env.get('SSH_PORT')), '0.0.0.0', () => {
-      console.log(`Winnie listening on port ${Env.get('SSH_PORT')}`)
+    ).listen(Number(Env.get('SSH_PORT')), Env.get('SSH_HOST'), () => {
+      this.logger.info(`Winnie listening on ${Env.get('SSH_HOST')}:${Env.get('SSH_PORT')}`)
     })
   }
 
