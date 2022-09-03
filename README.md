@@ -34,7 +34,7 @@
 - [Node.js](https://nodejs.org/en/) LTS 16.x or higher
 - [PostgreSQL](https://www.postgresql.org/) 14.x
 
-## Configuration
+## ⚙️ Configuration
 
 Winnie must be configured using environment variables:
 
@@ -57,6 +57,8 @@ WINNIE_NAME=winnie-dev
 ENABLE_DASHBOARD=           # don't set if you want to setup ssh honeypot only
 ABUSEIP_API_KEY=            # remove if you don't want to report the attempts
 ```
+
+## Screenshots
 
 ## ✨ Contributors
 
