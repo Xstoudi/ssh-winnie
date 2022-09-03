@@ -36,6 +36,9 @@
 - [Node.js](https://nodejs.org/en/) LTS 16.x or higher
 - [PostgreSQL](https://www.postgresql.org/) 14.x
 
+## 🛫 Getting started
+Just pull [the docker image](https://hub.docker.com/repository/docker/xstoudi/winnie) and run it with appropriate environment variables as described below, either by command line or using `docker compose`.
+
 ## ⚙️ Configuration
 
 Winnie must be configured using environment variables:
@@ -60,10 +63,9 @@ ENABLE_DASHBOARD=           # don't set if you want to setup ssh honeypot only
 ABUSEIP_API_KEY=            # remove if you don't want to report the attempts
 ```
 
-## Screenshots
+## 📷 Screenshots
 ![image](https://user-images.githubusercontent.com/2575182/188282950-136a6d86-e38e-4349-b9cf-c8a049676140.png)
 ![image](https://user-images.githubusercontent.com/2575182/188282967-5b28eb7e-d1a0-4302-b1d6-c9792622671e.png)
-
 
 ## ✨ Contributors
 
