@@ -59,6 +59,9 @@ ABUSEIP_API_KEY=            # remove if you don't want to report the attempts
 ```
 
 ## Screenshots
+![image](https://user-images.githubusercontent.com/2575182/188282950-136a6d86-e38e-4349-b9cf-c8a049676140.png)
+![image](https://user-images.githubusercontent.com/2575182/188282967-5b28eb7e-d1a0-4302-b1d6-c9792622671e.png)
+
 
 ## ✨ Contributors
 
