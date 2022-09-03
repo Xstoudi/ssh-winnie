@@ -19,6 +19,9 @@
     <img src="https://img.shields.io/github/license/Xstoudi/ssh-winnie?style=flat-square" alt="License" />
   </a>
 </p>
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/2575182/188282815-f07a335d-13ae-4ec2-a3ea-b8f084de8772.png">
+</p>
 
 ## 📜 Features
 
