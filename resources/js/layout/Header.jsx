@@ -11,7 +11,7 @@ export default function Header() {
           <div className="flex-1 md:flex md:items-center md:gap-12">
             <a className="block text-teal-300" href="/">
               <span className="sr-only">Home</span>
-              <img src={logo} />
+              <img src={logo} className="w-16 h-16" />
             </a>
           </div>
 
