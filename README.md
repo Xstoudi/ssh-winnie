@@ -1,7 +1,18 @@
 # ssh-winnie
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
+
+![GitHub workflow status](https://img.shields.io/github/workflow/status/Xstoudi/ssh-winnie/ci)
+
+![Docker image size](https://img.shields.io/docker/image-size/xstoudi/winnie?sort=date)
+
+![GitHub issues](https://img.shields.io/github/issues-raw/Xstoudi/ssh-winnie)
+
+![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/Xstoudi/ssh-winnie)
 
 ## Contributors ✨
 
