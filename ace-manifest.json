@@ -1,17 +1,5 @@
 {
   "commands": {
-    "honeypot:init": {
-      "settings": {
-        "loadApp": true,
-        "stayAlive": false
-      },
-      "commandPath": "./commands/HoneypotInit",
-      "commandName": "honeypot:init",
-      "description": "",
-      "args": [],
-      "aliases": [],
-      "flags": []
-    },
     "honeypot:run": {
       "settings": {
         "loadApp": true,

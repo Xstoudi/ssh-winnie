@@ -10,7 +10,7 @@ export default class StatsController {
   public async usernames({ request }: HttpContextContract) {
     const maybeHostId = request.qs().host
 
-    const query = Database.from('clean_reports')
+    const query = Database.from('reports')
       .select('username')
       .count('username as population')
       .groupBy('username')
@@ -30,7 +30,7 @@ export default class StatsController {
   public async passwords({ request }: HttpContextContract) {
     const maybeHostId = request.qs().host
 
-    const query = Database.from('clean_reports')
+    const query = Database.from('reports')
       .select('password')
       .count('password as population')
       .groupBy('password')
@@ -50,10 +50,10 @@ export default class StatsController {
   public async countries({ request }: HttpContextContract) {
     const maybeHostId = request.qs().host
 
-    const query = Database.from('clean_reports')
-      .select('as_country_code')
-      .count('as_country_code as population')
-      .groupBy('as_country_code')
+    const query = Database.from('reports')
+      .select('country_code')
+      .count('country_code as population')
+      .groupBy('country_code')
       .orderBy('population', 'desc')
 
     if (maybeHostId !== undefined) {
@@ -62,15 +62,15 @@ export default class StatsController {
 
     return (await query).map((country) => ({
       population: Number(country.population),
-      id: country.as_country_code,
-      name: getName(country.as_country_code, 'en'),
+      id: country.country_code,
+      name: getName(country.country_code, 'en'),
     }))
   }
 
   public async asNames({ request }: HttpContextContract) {
     const maybeHostId = request.qs().host
 
-    const query = Database.from('clean_reports')
+    const query = Database.from('reports')
       .select('as_name')
       .count('as_name as population')
       .groupBy('as_name')
@@ -90,7 +90,7 @@ export default class StatsController {
   public async identities({ request }: HttpContextContract) {
     const maybeHostId = request.qs().host
 
-    const query = Database.from('clean_reports')
+    const query = Database.from('reports')
       .select('remote_identity')
       .count('remote_identity as population')
       .groupBy('remote_identity')
@@ -115,22 +115,22 @@ export default class StatsController {
     const lastDayInterval = Interval.before(DateTime.now(), { day: 1 })
 
     const queries = [
-      Database.from('clean_reports').count('* as population'),
-      Database.from('clean_reports').countDistinct('as_country_code as population'),
-      Database.from('clean_reports').countDistinct('username as population'),
-      Database.from('clean_reports').countDistinct('password as population'),
-      Database.from('clean_reports').countDistinct('as_name as population'),
-      Database.from('clean_reports').countDistinct('remote_identity as population'),
-      Database.from('clean_reports')
+      Database.from('reports').count('* as population'),
+      Database.from('reports').countDistinct('country_code as population'),
+      Database.from('reports').countDistinct('username as population'),
+      Database.from('reports').countDistinct('password as population'),
+      Database.from('reports').countDistinct('as_name as population'),
+      Database.from('reports').countDistinct('remote_identity as population'),
+      Database.from('reports')
         .count('* as population')
         .whereBetween('created_at', [
           lastMinuteInterval.start.toSQL(),
           lastMinuteInterval.end.toSQL(),
         ]),
-      Database.from('clean_reports')
+      Database.from('reports')
         .count('* as population')
         .whereBetween('created_at', [lastHourInterval.start.toSQL(), lastHourInterval.end.toSQL()]),
-      Database.from('clean_reports')
+      Database.from('reports')
         .count('* as population')
         .whereBetween('created_at', [lastDayInterval.start.toSQL(), lastDayInterval.end.toSQL()]),
     ].map((query) => {
@@ -167,7 +167,7 @@ export default class StatsController {
 
     if (address !== undefined) query.whereLike('remote_addr', `%${address}%`)
     if (identity !== undefined) query.whereLike('remote_identity', `%${identity}%`)
-    if (country !== undefined) query.whereLike('as_country_code', `%${country}%`)
+    if (country !== undefined) query.whereLike('country_code', `%${country}%`)
     if (asName !== undefined) query.whereLike('as_name', `%${asName}%`)
     if (asn !== undefined) query.whereLike('asn', `%${asn}%`)
     if (host !== undefined) query.whereLike('host', `%${host}%`)
@@ -181,7 +181,7 @@ export default class StatsController {
     const query = Database.from('clean_reports')
     if (address !== undefined) query.whereLike('remote_addr', `%${address}%`)
     if (identity !== undefined) query.whereLike('remote_identity', `%${identity}%`)
-    if (country !== undefined) query.whereLike('as_country_code', `%${country}%`)
+    if (country !== undefined) query.whereLike('country_code', `%${country}%`)
     if (asName !== undefined) query.whereLike('as_name', `%${asName}%`)
     if (asn !== undefined) query.whereLike('asn', `%${asn}%`)
     if (host !== undefined) query.whereLike('host', `%${host}%`)
@@ -198,7 +198,7 @@ export default class StatsController {
         remote_addr: 'remote_addr',
         remote_identity: 'remote_identity',
         id_range: 'id_range',
-        as_country_code: 'as_country_code',
+        country_code: 'country_code',
         as_name: 'as_name',
         asn: 'asn',
         host: 'host',

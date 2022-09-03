@@ -198,7 +198,7 @@ export default function Reports() {
                     {trimLabel(report.remote_identity)}
                   </td>
                   <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
-                    {report.as_country_code}
+                    {report.country_code}
                   </td>
                   <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
                     {trimLabel(report.as_name)}
