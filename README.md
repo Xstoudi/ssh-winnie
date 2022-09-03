@@ -27,6 +27,8 @@
 
 - Record login attempts on PostgreSQL database
 - Dashboard to display basic informations about collected samples, including username, password, autonomous system name, country
+- Export attempts to CSV
+- Able to centralize datas from multiple honeypot hosts
 - Report remote IP to AbuseIPDB
 
 ## 🚧 Requirements
