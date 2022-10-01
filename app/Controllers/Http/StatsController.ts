@@ -163,7 +163,7 @@ export default class StatsController {
   public async reports({ request }: HttpContextContract) {
     const { address, identity, country, asName, asn, host, page = 0 } = request.qs()
 
-    const query = Database.from('clean_reports')
+    const query = Database.from('reports')
 
     if (address !== undefined) query.whereLike('remote_addr', `%${address}%`)
     if (identity !== undefined) query.whereLike('remote_identity', `%${identity}%`)
@@ -178,7 +178,7 @@ export default class StatsController {
   public async exportReports({ request, response }: HttpContextContract) {
     const { address, identity, country, asName, asn, host } = request.qs()
 
-    const query = Database.from('clean_reports')
+    const query = Database.from('reports')
     if (address !== undefined) query.whereLike('remote_addr', `%${address}%`)
     if (identity !== undefined) query.whereLike('remote_identity', `%${identity}%`)
     if (country !== undefined) query.whereLike('country_code', `%${country}%`)
