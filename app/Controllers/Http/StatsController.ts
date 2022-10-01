@@ -172,7 +172,7 @@ export default class StatsController {
     if (asn !== undefined) query.whereLike('asn', `%${asn}%`)
     if (host !== undefined) query.whereLike('host', `%${host}%`)
 
-    return query.paginate(page, PER_PAGE)
+    return query.orderBy('created_at', 'desc').paginate(page, PER_PAGE)
   }
 
   public async exportReports({ request, response }: HttpContextContract) {

@@ -54,6 +54,7 @@ export default class HoneypotRun extends BaseCommand {
   }
 
   private async runServer() {
+    const SSH_HOST = Env.get('SSH_HOST', '0.0.0.0')
     new Server(
       {
         hostKeys: [await this.getOrGenerateKeyPair()],
@@ -132,8 +133,8 @@ export default class HoneypotRun extends BaseCommand {
             this.logger.error(err)
           })
       }
-    ).listen(Number(Env.get('SSH_PORT')), Env.get('SSH_HOST'), () => {
-      this.logger.info(`Winnie listening on ${Env.get('SSH_HOST')}:${Env.get('SSH_PORT')}`)
+    ).listen(Number(Env.get('SSH_PORT')), SSH_HOST, () => {
+      this.logger.info(`Winnie listening on ${SSH_HOST}:${Env.get('SSH_PORT')}`)
     })
   }
 
