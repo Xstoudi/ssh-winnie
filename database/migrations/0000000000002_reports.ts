@@ -9,7 +9,7 @@ export default class extends BaseSchema {
 
       table.string('username', 32).notNullable()
       table.string('password', 255).notNullable()
-      table.string('remote_addr', 15).notNullable().index()
+      table.string('remote_addr', 45).notNullable().index()
       table.string('remote_identity', 255).notNullable()
       table.integer('id_host').unsigned().references('id').inTable('hosts').notNullable()
       table.string('country_code', 2).nullable()
