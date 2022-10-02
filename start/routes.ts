@@ -13,6 +13,12 @@ Route.group(() => {
   Route.get('/reports/export', 'StatsController.exportReports')
 }).prefix('/stats')
 
+Route.group(() => {
+  Route.get('/usernames', 'DownloadsController.usernames')
+  Route.get('/passwords', 'DownloadsController.passwords')
+  Route.get('/remotes', 'DownloadsController.remotes')
+}).prefix('/downloads')
+
 Route.get('*', async ({ view }: HttpContextContract) => {
   return view.render('home')
 })

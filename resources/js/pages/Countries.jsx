@@ -20,7 +20,14 @@ export default function Countries() {
 
   return (
     <div className="flex">
-      <div>
+      <div className="flex flex-col gap-3">
+        <a
+          href="/downloads/remotes"
+          target="_blank"
+          class="w-full text-center inline-block px-12 py-3 text-sm font-medium text-white bg-green-600 border border-green-600 rounded active:text-greeb-500 hover:bg-transparent hover:text-green-600 focus:outline-none focus:ring"
+        >
+          Download
+        </a>
         <Table
           columns={[
             { label: 'Country', key: 'name' },
